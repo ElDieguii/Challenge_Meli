@@ -156,19 +156,41 @@ print (bases_de_datos)
 #SELECCIONO LA BASE DE DATOS CON LA QUE QUIERO OPERAR
 db = pymysql.connect("127.0.0.1","root","Diego2019", "prueba")
 cursor=db.cursor()
-#CREAR TABLA EN BASE DE DATOS
-#cursor.execute("CREATE TABLE files (archivo VARCHAR(25),fecha_creacion VARCHAR(10))")
 
+#CREAR TABLA EN BASE DE DATOS
+#cursor.execute("CREATE TABLE tabla_archivos (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id), archivo VARCHAR(25),fecha_creacion VARCHAR(10))")
+
+#ELIMINAR TABLA EN BASE DE DATOS
+#cursor.execute("DROP TABLE tabla_archivos")
 
 #MUESTRO ARCHIVOS DE GOOGLE DRIVE
+##LISTA DE NOMBRES DE ARCHIVOS EN DRIVE
 file_names = []
+##LISTA DE DATETIME DE ARCHIVOS EN DRIVE
 file_createdTime = []
+#LISTA CON TODOS LOS ARCHIVOS QUE VIENE DE LA FUNCION QUICKSTART
 files = quickstart.main()
+##LLENO LAS LISTAS PREVIAMENTE CREADAS, CON LOS DATOS PROVENIENTES DE QUICKSTART
 for file in files:
     file_names.append('{0}'.format(file['name']))
 for file in files:
 	file_createdTime.append('{0}'.format(file['createdTime']))
 
+contador=0
+borrar = "prueba"
+##INSERTO EN LA TABLA DE PRUEBA, LOS DATOS ALMACENADOS EN LAS LISTAS PREVIAS
+for file in files:
+	sql = "INSERT INTO tabla_archivos (id, archivo, fecha_creacion) VALUES (NULL,'%s','1')"%(file_names[1])#.format(file_names[0],file_createdTime[0])
+	try:
+		cursor.execute(sql)
+		db.commit()
+		contador = contador +1
+		print("ingresado en tabla")
+	except:
+		print("No ingresado en tabla")
+
 print(file_names, file_createdTime)
+
+
 db.close()
 
