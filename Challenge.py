@@ -3,20 +3,28 @@ import smtplib
 
 ##IMPORTO ARCHIVO CON FUNCION DE GOOGLE API
 import quickstart
-quickstart.main()
+
+
 ##FUNCIONES
+def mostrar_files_google_drive():
+	if __name__ == '__main__':
+        	quickstart.main()
+
 def crear_base_de_datos(bd, nombre):
 	cursor=db.cursor()
 	sql = "CREATE DATABASE %s"%(nombre)
 	try:
 		cursor.execute(sql)
 	except:
-		print("Hubo un error al crear la base de datos")
+		print("Ya existe una base de datos llamada %s"%(nombre))
 
 def eliminar_base_de_datos(bd, nombre):
 	cursor=db.cursor()
-	cursor.execute("DROP SCHEMA nombre") %(nombre)
-	print("Base de datos, eliminada con exito")
+	try:
+		cursor.execute("DROP SCHEMA nombre") %(nombre)
+		print("Base de datos, eliminada con exito")
+	except:
+		print("No se pudo borrar la base de datos %s, ya que no existe"%(nombre))
 
 def insertarEnBaseDeDatos(nombreUsuario, emailDeUsuario):
 	# Prepare SQL query to INSERT a record into the database.
@@ -152,8 +160,8 @@ db = pymysql.connect("127.0.0.1","root","Diego2019", "prueba")
 #cursor.execute("CREATE TABLE usuarios (nombre_usuario VARCHAR(25), email_usuario varchar(40))")
 
 #MUESTRO ARCHIVOS DE GOOGLE DRIVE
-if __name__ == '__main__':
-    main()
+mostrar_files_google_drive()
+
 
 db.close()
 
