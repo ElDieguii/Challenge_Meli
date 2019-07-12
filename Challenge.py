@@ -27,8 +27,38 @@ def eliminar_base_de_datos(bd, nombre):
 	except:
 		print("No se pudo borrar la base de datos %s, ya que no existe"%(nombre))
 
+def seEncuentraEnBd(archivo_a_ingresar):
+	# Prepare SQL query to READ a record into the database.
+	sql = "SELECT * FROM tabla_archivos WHERE id > {0}".format(0)
+
+	# Execute the SQL command	
+	cursor.execute(sql)
+
+	# Fetch all the rows in a list of lists.
+	results = cursor.fetchall()
+	flag = False
+	for row in results:
+		if row[1]==archivo_a_ingresar:
+			flag = True
+	return flag
+		
+def enviarEmail(mensaje, emailDestino):
+	
+	fromaddr= 'dieg0xilla@gmail.com'
+	toaddrs = emailDestino
+	msg= mensaje
+
+	username = 'dieg0xilla@gmail.com'
+	password = 'Diego2017'
+
+	server= smtplib.SMTP('smtp.gmail.com:587')
+	server.starttls()
+	server.login(username,password)
+	server.sendmail(fromaddr, toaddrs, msg)
+	server.quit()
+#####################   FUNCIONES DE PRACTICA ###########################################################################
 def insertarEnBaseDeDatos(nombreUsuario, emailDeUsuario):
-	# Prepare SQL query to INSERT a record into the database.
+    	# Prepare SQL query to INSERT a record into the database.
 	sql = "INSERT INTO test(id, name, email) VALUES (NULL,'{0}','{1}')".format(nombreUsuario,emailDeUsuario)
 	try:
 	   # Execute the SQL command
@@ -62,7 +92,7 @@ def eliminarFilaBd(idAEliminar):
 	   db.rollback()
 
 def mostrarBaseDeDatos():
-	# Prepare SQL query to READ a record into the database.
+    	# Prepare SQL query to READ a record into the database.
 	sql = "SELECT * FROM test WHERE id > {0}".format(0)
 
 	# Execute the SQL command	
@@ -76,36 +106,6 @@ def mostrarBaseDeDatos():
    		email = row[2]
    		# Now print fetched result
    		print ("id = {0}, name = {1}, email = {2}".format(id,name,email))
-def seEncuentraEnBd(archivo_a_ingresar):
-	# Prepare SQL query to READ a record into the database.
-	sql = "SELECT * FROM tabla_archivos WHERE id > {0}".format(0)
-
-	# Execute the SQL command	
-	cursor.execute(sql)
-
-	# Fetch all the rows in a list of lists.
-	results = cursor.fetchall()
-	flag = False
-	for row in results:
-		if row[1]==archivo_a_ingresar:
-			flag = True
-	return flag
-		
-def enviarEmail(mensaje, emailDestino):
-	
-	fromaddr= 'dieg0xilla@gmail.com'
-	toaddrs = emailDestino
-	msg= mensaje
-
-	username = 'dieg0xilla@gmail.com'
-	password = 'Diego2017'
-
-	server= smtplib.SMTP('smtp.gmail.com:587')
-	server.starttls()
-	server.login(username,password)
-	server.sendmail(fromaddr, toaddrs, msg)
-	server.quit()
-
 
 def insertarNombreYEmailEnBd():
 	respuesta0 = input("Desea agregar usuario y mail? ")
@@ -132,14 +132,15 @@ def eliminarIds():
 		idAEliminar = int(input("Ingrese el id a eliminar: "))
 		eliminarFilaBd(idAEliminar)
 		respuesta1=input("Desea eliminar otro id? ")
-
+######################################################################################
 	
 
 ##MAIN##
-#CONECTARSE A BASE DE DATOS
 
+#CONECTARSE A BASE DE DATOS
 db = pymysql.connect("127.0.0.1","root","Diego2019")
 cursor = db.cursor()
+
 #IMPRIME VERSION DE BD
 print(db)
 
@@ -177,8 +178,9 @@ for file in files:
 for file in files:
 	file_createdTime.append('{0}'.format(file['createdTime']))
 
+	
+#RECORTO LA FECHA
 i=-1
-#RECORTO LA FECHA 
 for file in file_createdTime:
     i=i+1
     file_createdTime[i] = file_createdTime[i][0:10]
