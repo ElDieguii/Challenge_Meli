@@ -36,14 +36,17 @@ def main():
     # Call the Drive v3 API
     results = service.files().list(
         pageSize=5, fields="nextPageToken, files(name, createdTime)").execute()
+    items = []
     items = results.get('files', [])
+    return items
     
-    if not items:
-        print('No files found.')
-    else:
-        print('Files:')
-        for item in items:
-            print(u'file:{0}, created time:{1}'.format(item['name'], item['createdTime']))
+    #if not items:
+        #print('No files found.')
+    #else:
+        #print('Files:')
+        #for item in items:
+            #print(u'file:{0}, created time:{1}'.format(item['name'], item['createdTime']))
+            
             
     
 if __name__ == '__main__':
