@@ -35,7 +35,7 @@ def main():
 
     # Call the Drive v3 API
     results = service.files().list(
-        pageSize=5, fields="nextPageToken, files(name, createdTime)").execute()
+        pageSize=50, fields="nextPageToken, files(name, createdTime)").execute()
     items = []
     items = results.get('files', [])
     return items
