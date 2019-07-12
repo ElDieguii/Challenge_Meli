@@ -1,7 +1,9 @@
 import pymysql
 import smtplib
-from quickstart import main
 
+##IMPORTO ARCHIVO CON FUNCION DE GOOGLE API
+import quickstart
+quickstart.main()
 ##FUNCIONES
 def crear_base_de_datos(bd, nombre):
 	cursor=db.cursor()
