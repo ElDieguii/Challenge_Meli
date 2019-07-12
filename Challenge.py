@@ -1,11 +1,20 @@
 import pymysql
 import smtplib
+from datetime import datetime
 
 ##IMPORTO ARCHIVO CON FUNCION DE GOOGLE API
 import quickstart
 
 
 ##FUNCIONES
+def ordenar(x):
+    	aux1=file_createdTime[x]
+	file_createdTime[x]=file_createdTime[x+1]
+	file_createdTime[x+1]=aux1
+	aux2=file_names[x]
+	file_names[x] = file_names[x+1]
+	file_names[x+1] = aux2
+
 def mostrar_files_google_drive():
 	if __name__ == '__main__':
         	quickstart.main()
@@ -143,7 +152,7 @@ cursor = db.cursor()
 print(db)
 
 ##CREAR BASE DE DATOS
-crear_base_de_datos(db, "prueba")
+#crear_base_de_datos(db, "prueba")
 
 #MOSTRAR BASES DE DATOS EXISTENTES
 cursor.execute("SHOW DATABASES")
@@ -158,7 +167,7 @@ db = pymysql.connect("127.0.0.1","root","Diego2019", "prueba")
 cursor=db.cursor()
 
 #CREAR TABLA EN BASE DE DATOS
-#cursor.execute("CREATE TABLE tabla_archivos (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id), archivo VARCHAR(25),fecha_creacion VARCHAR(10))")
+cursor.execute("CREATE TABLE tabla_archivos (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id), archivo VARCHAR(100),fecha_creacion VARCHAR(10) )")
 
 #ELIMINAR TABLA EN BASE DE DATOS
 #cursor.execute("DROP TABLE tabla_archivos")
@@ -176,11 +185,23 @@ for file in files:
 for file in files:
 	file_createdTime.append('{0}'.format(file['createdTime']))
 
-contador=0
-borrar = "prueba"
+i=-1
+#RECORTO LA FECHA 
+for file in file_createdTime:
+    i=i+1
+    file_createdTime[i] = file_createdTime[i][0:10]
+
+#ORDENO AMBAS LISTAS SEGUN FECHA
+
+
+for k in range(len(file_createdTime)):
+    for x in range(len(file_createdTime)-1):	
+    	if (file_createdTime[x]>file_createdTime[x+1]):ordenar(x)
+
 ##INSERTO EN LA TABLA DE PRUEBA, LOS DATOS ALMACENADOS EN LAS LISTAS PREVIAS
+contador=0
 for file in files:
-	sql = "INSERT INTO tabla_archivos (id, archivo, fecha_creacion) VALUES (NULL,'%s','1')"%(file_names[1])#.format(file_names[0],file_createdTime[0])
+	sql = "INSERT INTO tabla_archivos (id, archivo, fecha_creacion) VALUES (NULL,'%s','%s')"%(file_names[contador], file_createdTime[contador])
 	try:
 		cursor.execute(sql)
 		db.commit()
@@ -188,6 +209,7 @@ for file in files:
 		print("ingresado en tabla")
 	except:
 		print("No ingresado en tabla")
+		contador = contador+1
 
 print(file_names, file_createdTime)
 
