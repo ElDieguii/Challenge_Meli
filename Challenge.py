@@ -7,14 +7,6 @@ import quickstart
 
 
 ##FUNCIONES
-def ordenar(x):
-    	aux1=file_createdTime[x]
-	file_createdTime[x]=file_createdTime[x+1]
-	file_createdTime[x+1]=aux1
-	aux2=file_names[x]
-	file_names[x] = file_names[x+1]
-	file_names[x+1] = aux2
-
 def mostrar_files_google_drive():
 	if __name__ == '__main__':
         	quickstart.main()
@@ -84,9 +76,9 @@ def mostrarBaseDeDatos():
    		email = row[2]
    		# Now print fetched result
    		print ("id = {0}, name = {1}, email = {2}".format(id,name,email))
-def seEncuentraEnBd(nombreAIngresar, emailAIngresar):
+def seEncuentraEnBd(archivo_a_ingresar):
 	# Prepare SQL query to READ a record into the database.
-	sql = "SELECT * FROM test WHERE id > {0}".format(0)
+	sql = "SELECT * FROM tabla_archivos WHERE id > {0}".format(0)
 
 	# Execute the SQL command	
 	cursor.execute(sql)
@@ -95,7 +87,7 @@ def seEncuentraEnBd(nombreAIngresar, emailAIngresar):
 	results = cursor.fetchall()
 	flag = False
 	for row in results:
-		if row[1]==nombreAIngresar and row[2] == emailAIngresar:
+		if row[1]==archivo_a_ingresar:
 			flag = True
 	return flag
 		
@@ -192,27 +184,42 @@ for file in file_createdTime:
     file_createdTime[i] = file_createdTime[i][0:10]
 
 #ORDENO AMBAS LISTAS SEGUN FECHA
-
+def ordenar(x):
+	aux1=file_createdTime[x]
+	file_createdTime[x]=file_createdTime[x+1]
+	file_createdTime[x+1]=aux1
+	aux2=file_names[x]
+	file_names[x] = file_names[x+1]
+	file_names[x+1] = aux2
 
 for k in range(len(file_createdTime)):
     for x in range(len(file_createdTime)-1):	
     	if (file_createdTime[x]>file_createdTime[x+1]):ordenar(x)
 
+##ENVIAR MAIL Y SUMAR CONTADOR
+def mail_contador(contador, mensaje, mail_recepto):
+	enviarEmail("Hay un archivo duplicado", "vivona.diego98@gmail.com")
+	contador = contador + 1
+	return contador
+
+
 ##INSERTO EN LA TABLA DE PRUEBA, LOS DATOS ALMACENADOS EN LAS LISTAS PREVIAS
 contador=0
 for file in files:
 	sql = "INSERT INTO tabla_archivos (id, archivo, fecha_creacion) VALUES (NULL,'%s','%s')"%(file_names[contador], file_createdTime[contador])
-	try:
-		cursor.execute(sql)
-		db.commit()
-		contador = contador +1
-		print("ingresado en tabla")
-	except:
-		print("No ingresado en tabla")
-		contador = contador+1
+	if seEncuentraEnBd(file_names[contador]):enviarEmail("Hay un archivo duplicado", "vivona.diego98@gmail.com")
+	
+	else: 
+		try: 
+			cursor.execute(sql)
+			db.commit()
+			contador = contador +1
+			print("ingresado en tabla")
+		except:
+			print("No ingresado en tabla")
+			contador = contador+1
 
 print(file_names, file_createdTime)
-
 
 db.close()
 
