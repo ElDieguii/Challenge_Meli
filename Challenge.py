@@ -143,7 +143,7 @@ cursor = db.cursor()
 print(db)
 
 ##CREAR BASE DE DATOS
-crear_base_de_datos(db, "prueba1")
+crear_base_de_datos(db, "prueba")
 
 #MOSTRAR BASES DE DATOS EXISTENTES
 cursor.execute("SHOW DATABASES")
@@ -155,13 +155,20 @@ print (bases_de_datos)
 
 #SELECCIONO LA BASE DE DATOS CON LA QUE QUIERO OPERAR
 db = pymysql.connect("127.0.0.1","root","Diego2019", "prueba")
-
+cursor=db.cursor()
 #CREAR TABLA EN BASE DE DATOS
-#cursor.execute("CREATE TABLE usuarios (nombre_usuario VARCHAR(25), email_usuario varchar(40))")
+#cursor.execute("CREATE TABLE files (archivo VARCHAR(25),fecha_creacion VARCHAR(10))")
+
 
 #MUESTRO ARCHIVOS DE GOOGLE DRIVE
-mostrar_files_google_drive()
+file_names = []
+file_createdTime = []
+files = quickstart.main()
+for file in files:
+    file_names.append('{0}'.format(file['name']))
+for file in files:
+	file_createdTime.append('{0}'.format(file['createdTime']))
 
-
+print(file_names, file_createdTime)
 db.close()
 
