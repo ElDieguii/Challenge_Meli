@@ -1,6 +1,6 @@
 import pymysql
 import smtplib
-
+from quickstart import main
 
 ##FUNCIONES
 def crear_base_de_datos(bd, nombre):
@@ -148,6 +148,10 @@ db = pymysql.connect("127.0.0.1","root","Diego2019", "prueba")
 
 #CREAR TABLA EN BASE DE DATOS
 #cursor.execute("CREATE TABLE usuarios (nombre_usuario VARCHAR(25), email_usuario varchar(40))")
+
+#MUESTRO ARCHIVOS DE GOOGLE DRIVE
+if __name__ == '__main__':
+    main()
 
 db.close()
 
