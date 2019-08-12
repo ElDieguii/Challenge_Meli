@@ -49,7 +49,7 @@ def enviarEmail(mensaje, emailDestino):
 	msg= mensaje
 
 	username = 'dieg0xilla@gmail.com'
-	password = 'Diego2017'
+	password = 'password'
 
 	server= smtplib.SMTP('smtp.gmail.com:587')
 	server.starttls()
